@@ -43,6 +43,93 @@
   background-color: #FF9030;
 }
 
+/* FAQ Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth height transition for details */
+details > div {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+details[open] > div {
+  animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+details:not([open]) > div {
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    max-height: 300px;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    max-height: 300px;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* Enhanced mouse scroll animations */
+@keyframes enhancedBounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0) translateY(-50%);
+  }
+  40%, 43% {
+    transform: translate3d(0, -8px, 0) translateY(-50%);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0) translateY(-50%);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0) translateY(-50%);
+  }
+}
+
+@keyframes enhancedPing {
+  75%, 100% {
+    transform: translate3d(0, 0, 0) translateY(-50%) scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-enhanced-bounce {
+  animation: enhancedBounce 2s infinite;
+}
+
+.animate-enhanced-ping {
+  animation: enhancedPing 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

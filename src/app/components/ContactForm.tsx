@@ -44,7 +44,7 @@ export default function ContactForm() {
         setSubmitStatus('error');
         setSubmitMessage(data.error || 'Erreur lors de l\'envoi du message.');
       }
-    } catch (error) {
+    } catch {
       setSubmitStatus('error');
       setSubmitMessage('Erreur de connexion. Veuillez réessayer.');
     } finally {
