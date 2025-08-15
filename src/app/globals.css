@@ -1,5 +1,48 @@
 @import "tailwindcss";
 
+/* Configuration de la police Pally */
+@font-face {
+  font-family: 'Pally';
+  src: url('/assets/fonts/Pally-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pally';
+  src: url('/assets/fonts/Pally-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pally';
+  src: url('/assets/fonts/Pally-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Couleur personnalisée Fridget */
+.text-fridget-orange {
+  color: #FF9030;
+}
+
+.bg-fridget-orange {
+  background-color: #FF9030;
+}
+
+.border-fridget-orange {
+  border-color: #FF9030;
+}
+
+.hover\:text-fridget-orange:hover {
+  color: #FF9030;
+}
+
+.hover\:bg-fridget-orange:hover {
+  background-color: #FF9030;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -10,6 +53,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-pally: 'Pally', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +66,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Pally', Arial, Helvetica, sans-serif;
 }
