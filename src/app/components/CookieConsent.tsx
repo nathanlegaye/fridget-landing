@@ -6,17 +6,24 @@ export default function CookieConsent() {
   const [showConsent, setShowConsent] = useState(false);
   const [analyticsConsent, setAnalyticsConsent] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   const initializeUmami = useCallback(() => {
     // Initialiser Umami si le consentement est donné
-    if (typeof window !== 'undefined' && analyticsConsent) {
+    if (isClient && analyticsConsent) {
       // Le composant UmamiAnalytics gère déjà l'initialisation
       // On peut juste logger pour confirmer
       console.log('Analytics consent granted - Umami will be loaded');
     }
-  }, [analyticsConsent]);
+  }, [analyticsConsent, isClient]);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
     // Vérifier si le consentement a déjà été donné
     const consent = localStorage.getItem('fridget-cookie-consent');
     
@@ -40,7 +47,7 @@ export default function CookieConsent() {
         setShowConsent(true);
       }
     }
-  }, [initializeUmami]);
+  }, [initializeUmami, isClient]);
 
   const acceptAll = () => {
     const consent = { analytics: true, marketing: false, necessary: true };

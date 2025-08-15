@@ -44,21 +44,21 @@ export default function Home() {
       <section className="bg-gradient-to-br from-gray-900 to-gray-800 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Icône fridge-cooker au centre */}
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-2">
             <Image
               src="/assets/images/icons/fridge/fridge-cooker.png"
               alt="Fridget Cooker"
               width={200}
               height={200}
-              className="mb-4"
+              className="mb-2"
             />
           </div>
           
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 font-pally">
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 font-pally">
             Gérez vos aliments
             <span className="text-fridget-orange block">intelligemment</span>
           </h1>
-          <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-pally">
+          <p className="text-xl text-gray-300 mb-6 max-w-3xl mx-auto font-pally">
             Fridget génère des recettes créatives à partir de vos fonds de placard et fonds de frigo. Transformez vos restes en délicieux repas et réduisez le gaspillage alimentaire !
           </p>
           
@@ -75,19 +75,43 @@ export default function Home() {
           </div>
           
           {/* Bouton de souris Mac animé pour indiquer le scroll */}
-          <div className="flex justify-center mt-8">
+          <div className="group flex flex-col items-center mt-8 space-y-4">
             <button 
               onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-              className="group flex flex-col items-center text-gray-400 hover:text-fridget-orange transition-colors duration-300"
+              className="flex flex-col items-center text-gray-400 hover:text-fridget-orange transition-colors duration-300"
             >
                              <div className="w-8 h-12 bg-gray-700 rounded-full border-2 border-gray-600 group-hover:border-fridget-orange transition-colors duration-300 relative overflow-hidden">
                  {/* Animation de la boule de scroll */}
-                 <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-400 group-hover:bg-fridget-orange rounded-full animate-bounce group-hover:animate-ping"></div>
+                 <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-400 group-hover:bg-fridget-orange rounded-full animate-bounce"></div>
                </div>
-              <span className="text-xs mt-2 font-pally opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                Scroller
-              </span>
             </button>
+
+            {/* Flèche qui oscille de haut en bas */}
+            <button 
+              onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+              className="flex flex-col items-center text-fridget-orange hover:text-orange-400 transition-colors duration-300 pb-0"
+            >
+              <div className="animate-bounce">
+                <svg 
+                  className="w-6 h-6" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </div>
+            </button>
+
+            {/* Texte "Scroller" partagé qui s'affiche au survol de n'importe quel élément */}
+            <span className="text-xs font-pally opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              Scroller
+            </span>
           </div>
         </div>
       </section>
@@ -187,8 +211,8 @@ export default function Home() {
             </div>
             <div className="text-center">
           <Image
-                src={`/assets/images/screenshots/screen_fav.png?v=${Date.now()}`}
-                alt="Screenshot de l&apos;app Fridget"
+                src="/assets/images/screenshots/screen_fav.png"
+                alt="Screenshot de l'app Fridget"
                 width={400}
                 height={600}
                 className="rounded-2xl"
@@ -341,7 +365,7 @@ export default function Home() {
             Prêt à transformer votre cuisine ?
           </h2>
           <p className="text-xl text-orange-100 mb-8 font-pally">
-            Rejoignez des milliers d&apos;utilisateurs qui ont déjà adopté Fridget
+            Rejoignez des centaines d&apos;utilisateurs qui ont déjà adopté Fridget
           </p>
           <div className="flex justify-center">
             <button onClick={handleAppStoreClick} className="inline-block hover:opacity-80 transition-opacity">
