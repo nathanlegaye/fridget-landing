@@ -66,7 +66,7 @@ export default function ComingSoonModal({ isOpen, onClose }: ComingSoonModalProp
           {/* Icône Fridget */}
           <div className="flex justify-center mb-6">
             <Image
-              src="/assets/images/icons/fridge/fridge-cooker.png"
+              src="/assets/images/icons/fridge/fridge-waiting.png"
               alt="Fridget"
               width={80}
               height={80}
