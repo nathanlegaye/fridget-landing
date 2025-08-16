@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
+  console.log('🚀 [NOTIFY API] Début de la requête POST');
+  
   try {
     const { email } = await request.json();
+    console.log('📧 [NOTIFY API] Email reçu:', email);
 
     // Validation de l'email
     if (!email || !email.includes('@')) {
+      console.log('❌ [NOTIFY API] Email invalide:', email);
       return NextResponse.json(
         { error: 'Email invalide' },
         { status: 400 }
@@ -15,9 +19,14 @@ export async function POST(request: NextRequest) {
     // Vérifier si les variables d'environnement Supabase sont configurées
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    console.log('🔧 [NOTIFY API] Variables d\'environnement:');
+    console.log('  - NEXT_PUBLIC_SUPABASE_URL:', supabaseUrl ? `${supabaseUrl.substring(0, 20)}...` : 'MISSING');
+    console.log('  - NEXT_PUBLIC_SUPABASE_ANON_KEY:', supabaseAnonKey ? `${supabaseAnonKey.substring(0, 20)}...` : 'MISSING');
+    console.log('  - RESEND_API_KEY:', process.env.RESEND_API_KEY ? 'PRESENT' : 'MISSING');
 
     if (!supabaseUrl || !supabaseAnonKey) {
-      console.warn('Variables d\'environnement Supabase non configurées');
+      console.warn('⚠️ [NOTIFY API] Variables d\'environnement Supabase non configurées');
       
       // Fallback : simuler une inscription réussie
       return NextResponse.json(
@@ -30,43 +39,92 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log('✅ [NOTIFY API] Variables d\'environnement OK, import de Supabase...');
+    
     // Import dynamique de Supabase seulement si configuré
-    const { supabase } = await import('@/lib/supabase');
+    let supabase;
+    try {
+      const supabaseModule = await import('@/lib/supabase');
+      supabase = supabaseModule.supabase;
+      console.log('✅ [NOTIFY API] Supabase importé avec succès');
+    } catch (importError) {
+      console.error('❌ [NOTIFY API] Erreur lors de l\'import Supabase:', importError);
+      throw new Error(`Erreur import Supabase: ${importError}`);
+    }
 
+    console.log('🔍 [NOTIFY API] Vérification si l\'email existe déjà...');
+    
     // Vérifier si l'email existe déjà
-    const { data: existingUser } = await supabase
-      .from('notifications')
-      .select('email')
-      .eq('email', email)
-      .single();
+    let existingUser;
+    try {
+      const { data, error: selectError } = await supabase
+        .from('notifications')
+        .select('email')
+        .eq('email', email)
+        .single();
+      
+      if (selectError && selectError.code !== 'PGRST116') { // PGRST116 = no rows returned
+        console.error('❌ [NOTIFY API] Erreur lors de la vérification email:', selectError);
+        throw new Error(`Erreur vérification: ${selectError.message}`);
+      }
+      
+      existingUser = data;
+      console.log('✅ [NOTIFY API] Vérification email terminée, utilisateur existant:', !!existingUser);
+    } catch (checkError) {
+      console.error('❌ [NOTIFY API] Erreur lors de la vérification email:', checkError);
+      throw new Error(`Erreur vérification email: ${checkError}`);
+    }
 
     if (existingUser) {
+      console.log('⚠️ [NOTIFY API] Email déjà inscrit:', email);
       return NextResponse.json(
         { error: 'Cet email est déjà inscrit à la liste de notification' },
         { status: 400 }
       );
     }
 
+    console.log('💾 [NOTIFY API] Insertion de l\'email dans Supabase...');
+    
     // Insérer l'email dans Supabase
-    const { error } = await supabase
-      .from('notifications')
-      .insert([
-        { 
-          email, 
-          created_at: new Date().toISOString(),
-          status: 'active'
-        }
-      ])
-      .select();
-
-    if (error) {
-      console.error('Erreur Supabase:', error);
-      throw new Error('Erreur lors de l\'inscription');
+    let insertResult;
+    try {
+      const { data, error } = await supabase
+        .from('notifications')
+        .insert([
+          { 
+            email, 
+            created_at: new Date().toISOString(),
+            status: 'active'
+          }
+        ])
+        .select();
+      
+      insertResult = { data, error };
+      console.log('📊 [NOTIFY API] Résultat insertion:', { 
+        success: !error, 
+        dataCount: data?.length || 0,
+        error: error ? error.message : null
+      });
+    } catch (insertError) {
+      console.error('❌ [NOTIFY API] Erreur lors de l\'insertion:', insertError);
+      throw new Error(`Erreur insertion: ${insertError}`);
     }
+
+    if (insertResult.error) {
+      console.error('❌ [NOTIFY API] Erreur Supabase après insertion:', insertResult.error);
+      console.error('  - Code:', insertResult.error.code);
+      console.error('  - Message:', insertResult.error.message);
+      console.error('  - Details:', insertResult.error.details);
+      console.error('  - Hint:', insertResult.error.hint);
+      throw new Error(`Erreur Supabase: ${insertResult.error.message}`);
+    }
+
+    console.log('✅ [NOTIFY API] Email inséré avec succès dans Supabase');
 
     // Envoyer un email de confirmation via Resend (optionnel)
     const resendApiKey = process.env.RESEND_API_KEY;
     if (resendApiKey) {
+      console.log('📧 [NOTIFY API] Envoi email de confirmation via Resend...');
       try {
         const resendResponse = await fetch('https://api.resend.com/emails', {
           method: 'POST',
@@ -116,15 +174,20 @@ export async function POST(request: NextRequest) {
         });
 
         if (resendResponse.ok) {
-          console.log('Email de confirmation envoyé avec succès à:', email);
+          console.log('✅ [NOTIFY API] Email de confirmation envoyé avec succès à:', email);
         } else {
-          console.warn('Erreur Resend, mais l\'inscription est réussie');
+          const resendError = await resendResponse.text();
+          console.warn('⚠️ [NOTIFY API] Erreur Resend, mais l\'inscription est réussie:', resendError);
         }
       } catch (resendError) {
-        console.warn('Erreur Resend, mais l\'inscription est réussie:', resendError);
+        console.warn('⚠️ [NOTIFY API] Erreur Resend, mais l\'inscription est réussie:', resendError);
       }
+    } else {
+      console.log('⚠️ [NOTIFY API] Pas de clé Resend configurée, email de confirmation ignoré');
     }
 
+    console.log('🎉 [NOTIFY API] Inscription terminée avec succès pour:', email);
+    
     return NextResponse.json(
       { 
         message: 'Inscription réussie ! Vérifiez votre email pour la confirmation.',
@@ -134,7 +197,11 @@ export async function POST(request: NextRequest) {
     );
 
   } catch (error) {
-    console.error('Erreur notification:', error);
+    console.error('💥 [NOTIFY API] Erreur notification:', error);
+    console.error('  - Type:', error.constructor.name);
+    console.error('  - Message:', error.message);
+    console.error('  - Stack:', error.stack);
+    
     return NextResponse.json(
       { error: 'Erreur lors de l\'inscription à la liste de notification' },
       { status: 500 }
