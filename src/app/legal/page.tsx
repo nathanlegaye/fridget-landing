@@ -30,9 +30,9 @@ export default function Legal() {
             <h2 className="text-2xl font-semibold text-white mb-4">1. Éditeur du site</h2>
             <div className="space-y-2">
               <p><strong>Nom :</strong> Fridget</p>
-              <p><strong>Adresse :</strong> [Adresse à compléter]</p>
-              <p><strong>Email :</strong> contact.fridget@gmail.com</p>
-              <p><strong>Directeur de publication :</strong> [Nom à compléter]</p>
+              <p><strong>Adresse :</strong> 32 avenue Montaigne, 49100 Angers</p>
+              <p><strong>Email :</strong> <a href="mailto:contact.fridget@gmail.com" className="text-fridget-orange hover:underline">contact.fridget@gmail.com</a></p>
+              <p><strong>Directeur de publication :</strong> Nathan LEGAYE</p>
             </div>
           </section>
 
@@ -69,7 +69,7 @@ export default function Legal() {
             </p>
             <p>
               Si vous constatez une lacune, erreur ou ce qui parait être un dysfonctionnement, 
-              merci de bien vouloir le signaler par email à l'adresse contact.fridget@gmail.com, 
+              merci de bien vouloir le signaler par email à l'adresse <a href="mailto:contact.fridget@gmail.com" className="text-fridget-orange hover:underline">contact.fridget@gmail.com</a>, 
               en décrivant le problème de la manière la plus précise possible.
             </p>
           </section>
@@ -103,7 +103,7 @@ export default function Legal() {
               Conformément aux dispositions de la loi n° 78-17 du 6 janvier 1978 modifiée, 
               vous disposez d'un droit d'accès, de modification et de suppression des 
               données vous concernant. Pour exercer ce droit, adressez-vous à : 
-              contact.fridget@gmail.com
+              <a href="mailto:contact.fridget@gmail.com" className="text-fridget-orange hover:underline"> contact.fridget@gmail.com</a>
             </p>
           </section>
 

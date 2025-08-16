@@ -10,11 +10,18 @@ import { ChevronDown } from 'lucide-react';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAnnualBilling, setIsAnnualBilling] = useState(false);
 
   const handleAppStoreClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsModalOpen(true);
   };
+
+  const monthlyPrice = 2.99;
+  const annualPrice = 29.99;
+  const currentPrice = isAnnualBilling ? annualPrice : monthlyPrice;
+  const currentPeriod = isAnnualBilling ? 'par an' : 'par mois';
+  const savings = (monthlyPrice * 12) - annualPrice;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-pally">
@@ -32,9 +39,9 @@ export default function Home() {
               />
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#features" className="text-gray-300 hover:text-fridget-orange transition-colors font-pally">Fonctionnalités</a>
-              <a href="#about" className="text-gray-300 hover:text-fridget-orange transition-colors font-pally">À propos</a>
-              <a href="#contact" className="text-gray-300 hover:text-fridget-orange transition-colors font-pally">Contact</a>
+              <a href="#features" className="text-gray-300 hover:text-fridget-orange transition-colors font-pally cursor-pointer">Fonctionnalités</a>
+              <a href="#about" className="text-gray-300 hover:text-fridget-orange transition-colors font-pally cursor-pointer">À propos</a>
+              <a href="#contact" className="text-gray-300 hover:text-fridget-orange transition-colors font-pally cursor-pointer">Contact</a>
             </nav>
           </div>
         </div>
@@ -64,7 +71,7 @@ export default function Home() {
           
           {/* Bouton App Store officiel */}
           <div className="flex justify-center">
-            <button onClick={handleAppStoreClick} className="inline-block hover:opacity-80 transition-opacity">
+            <button onClick={handleAppStoreClick} className="inline-block hover:opacity-80 transition-opacity cursor-pointer">
               <Image
                 src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg"
                 alt="Télécharger sur l'App Store"
@@ -78,7 +85,7 @@ export default function Home() {
           <div className="group flex flex-col items-center mt-8 space-y-4">
             <button 
               onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-              className="flex flex-col items-center text-gray-400 hover:text-fridget-orange transition-colors duration-300"
+              className="flex flex-col items-center text-gray-400 hover:text-fridget-orange transition-colors duration-300 cursor-pointer"
             >
                              <div className="w-8 h-12 bg-gray-700 rounded-full border-2 border-gray-600 group-hover:border-fridget-orange transition-colors duration-300 relative overflow-hidden">
                  {/* Animation de la boule de scroll */}
@@ -89,7 +96,7 @@ export default function Home() {
             {/* Flèche qui oscille de haut en bas */}
             <button 
               onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-              className="flex flex-col items-center text-fridget-orange hover:text-orange-400 transition-colors duration-300 pb-0"
+              className="flex flex-col items-center text-fridget-orange hover:text-orange-400 transition-colors duration-300 pb-0 cursor-pointer"
             >
               <div className="animate-bounce">
                 <svg 
@@ -145,7 +152,7 @@ export default function Home() {
             <div className="text-center p-6 bg-gray-700 rounded-lg">
               <div className="flex justify-center mx-auto mb-4">
                 <Image
-                  src="/assets/images/icons/fridge/fridge-ingredient.png"
+                  src="/assets/images/icons/fridge/fridge-open.png"
                   alt="Ingrédients"
                   width={80}
                   height={80}
@@ -158,7 +165,7 @@ export default function Home() {
             <div className="text-center p-6 bg-gray-700 rounded-lg">
               <div className="flex justify-center mx-auto mb-4">
                 <Image
-                  src="/assets/images/icons/fridge/fridge-cooker.png"
+                  src="/assets/images/icons/fridge/fridge-ingredient.png"
                   alt="Recettes"
                   width={80}
                   height={80}
@@ -232,20 +239,29 @@ export default function Home() {
             Commencez gratuitement et passez au niveau supérieur quand vous voulez
           </p>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Plan Gratuit */}
-            <div className="bg-gray-700 rounded-2xl p-8 border border-gray-600 relative">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2 font-pally">Gratuit</h3>
+            <div className="bg-gray-700 rounded-2xl p-6 border border-gray-600 relative">
+              <div className="text-center mb-4">
+                <div className="flex justify-center mb-3">
+                  <Image
+                    src="/assets/images/icons/fridge/fridge-commis.png"
+                    alt="Fridget Commis"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2 font-pally">Commis de cuisine</h3>
                 <p className="text-gray-400 font-pally">Parfait pour essayer</p>
               </div>
               
-              <div className="text-center mb-8">
-                <div className="text-4xl font-bold text-white mb-2 font-pally">0€</div>
-                <div className="text-gray-400 font-pally">par mois</div>
+              <div className="text-center mb-4">
+                <div className="text-4xl font-bold text-white font-pally flex items-center justify-center">
+                  0€<span className="text-lg font-bold ml-1">/mois</span>
+                </div>
               </div>
               
-              <ul className="space-y-4 mb-8 text-left">
+              <ul className="space-y-3 mb-6 text-left">
                 <li className="flex items-center">
                   <div className="w-5 h-5 bg-green-500 rounded-lg mr-3 flex items-center justify-center">
                     <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -292,24 +308,67 @@ export default function Home() {
             </div>
             
             {/* Plan Premium */}
-            <div className="bg-gradient-to-br from-fridget-orange to-orange-600 rounded-2xl p-8 border border-orange-500 relative">
+            <div className="bg-gradient-to-br from-fridget-orange to-orange-600 rounded-2xl p-6 border border-orange-500 relative">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-fridget-orange text-white px-4 py-2 rounded-full text-sm font-semibold font-pally">
+                <span className="bg-fridget-orange text-white px-4 py-2 rounded-xl text-sm font-semibold font-pally">
                   Recommandé
                 </span>
               </div>
               
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2 font-pally">Premium</h3>
+              <div className="text-center mb-4">
+                <div className="flex justify-center mb-3">
+                  <Image
+                    src="/assets/images/icons/fridge/fridge-cooker.png"
+                    alt="Fridget Chef"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2 font-pally">Chef étoilé</h3>
                 <p className="text-orange-100 font-pally">Accès illimité</p>
               </div>
               
-              <div className="text-center mb-8">
-                <div className="text-4xl font-bold text-white mb-2 font-pally">2,99€</div>
-                <div className="text-orange-100 font-pally">par mois</div>
+              {/* Toggle de facturation */}
+              <div className="flex items-center justify-center mb-4 space-x-4">
+                <span className={`text-sm font-pally ${!isAnnualBilling ? 'text-white' : 'text-orange-200'}`}>
+                  Mensuel
+                </span>
+                <button
+                  onClick={() => setIsAnnualBilling(!isAnnualBilling)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 cursor-pointer ${
+                    isAnnualBilling ? 'bg-white' : 'bg-orange-200'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-fridget-orange transition-transform ${
+                      isAnnualBilling ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+                <span className={`text-sm font-pally ${isAnnualBilling ? 'text-white' : 'text-orange-200'}`}>
+                  Annuel
+                </span>
               </div>
               
-              <ul className="space-y-4 mb-8 text-left">
+              <div className="text-center mb-4">
+                <div className="flex items-center justify-center space-x-4 mb-2">
+                  {isAnnualBilling && (
+                    <div className="text-lg text-orange-200 font-pally line-through">
+                      35,88€
+                    </div>
+                  )}
+                  <div className="text-4xl font-bold text-white font-pally flex items-center">
+                    {currentPrice.toFixed(2)}€<span className="text-lg font-bold ml-1">/{isAnnualBilling ? 'an' : 'mois'}</span>
+                  </div>
+                  {isAnnualBilling && (
+                    <div className="bg-green-500 text-white text-xs px-2 py-1 font-bold rounded-lg font-pally">
+                      -{savings.toFixed(2)}€
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              <ul className="space-y-3 mb-6 text-left">
                 <li className="flex items-center">
                   <div className="w-5 h-5 bg-white rounded-lg mr-3 flex items-center justify-center">
                     <svg className="w-3 h-3 text-fridget-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -368,7 +427,7 @@ export default function Home() {
             Rejoignez des centaines d&apos;utilisateurs qui ont déjà adopté Fridget
           </p>
           <div className="flex justify-center">
-            <button onClick={handleAppStoreClick} className="inline-block hover:opacity-80 transition-opacity">
+            <button onClick={handleAppStoreClick} className="inline-block hover:opacity-80 transition-opacity cursor-pointer">
           <Image
                 src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg"
                 alt="Télécharger sur l'App Store"
@@ -409,9 +468,9 @@ export default function Home() {
             <details className="bg-gray-800 rounded-lg border border-gray-700 group overflow-hidden">
               <summary className="px-6 py-4 cursor-pointer hover:bg-gray-700 transition-colors font-pally text-white font-semibold flex items-center justify-between">
                 <span>Comment fonctionne Fridget ?</span>
-                <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)]" />
+                <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 ease-in-out" />
               </summary>
-              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed animate-fadeIn">
+              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed transition-all duration-300 ease-in-out">
                 Fridget analyse vos ingrédients disponibles et génère des recettes créatives. 
                 Scannez vos placards et frigo, et l'app vous propose des repas délicieux 
                 à partir de vos restes.
@@ -422,11 +481,11 @@ export default function Home() {
             <details className="bg-gray-800 rounded-lg border border-gray-700 group overflow-hidden">
               <summary className="px-6 py-4 cursor-pointer hover:bg-gray-700 transition-colors font-pally text-white font-semibold flex items-center justify-between">
                 <span>Combien de recettes puis-je générer gratuitement ?</span>
-                <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)]" />
+                <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 ease-in-out" />
               </summary>
-              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed animate-fadeIn">
+              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed transition-all duration-300 ease-in-out">
                 Le plan gratuit vous permet de générer 3 recettes par mois. 
-                Pour un accès illimité, passez au plan Premium à 3,99€/mois.
+                Pour un accès illimité, passez au plan Premium à 2,99€/mois.
               </div>
             </details>
 
@@ -436,7 +495,7 @@ export default function Home() {
                 <span>Puis-je sauvegarder mes recettes préférées ?</span>
                 <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 ease-in-out" />
               </summary>
-              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed animate-fadeIn">
+              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed transition-all duration-300 ease-in-out">
                 L'ajout aux favoris est disponible uniquement avec le plan Premium. 
                 Vous pourrez ainsi créer votre collection personnelle de recettes.
               </div>
@@ -448,7 +507,7 @@ export default function Home() {
                 <span>Comment l'app réduit-elle le gaspillage alimentaire ?</span>
                 <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 ease-in-out" />
               </summary>
-              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed animate-fadeIn">
+              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed transition-all duration-300 ease-in-out">
                 En vous proposant des recettes basées sur vos ingrédients disponibles, 
                 Fridget vous aide à utiliser vos restes et éviter qu'ils finissent à la poubelle. 
                 L'app optimise l'utilisation de vos stocks existants.
@@ -461,7 +520,7 @@ export default function Home() {
                 <span>Quand l'application sera-t-elle disponible ?</span>
                 <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 ease-in-out" />
               </summary>
-              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed animate-fadeIn">
+              <div className="px-6 py-4 text-gray-300 font-pally leading-relaxed transition-all duration-300 ease-in-out">
                 L'application Fridget arrive très bientôt ! Inscrivez-vous à notre liste de notification 
                 pour être parmi les premiers informés de sa sortie et bénéficier d'avantages exclusifs.
               </div>
@@ -484,40 +543,48 @@ export default function Home() {
                   className="mr-2"
                 />
               </div>
-              <p className="text-gray-400 font-pally">
+              <p className="text-gray-400 font-pally mb-4">
                 Votre assistant culinaire intelligent pour une cuisine plus responsable.
               </p>
+              <div className="flex justify-start">
+                <Image
+                  src="/assets/images/icons/fridge/fridge-fav.png"
+                  alt="Fridget Favoris"
+                  width={64}
+                  height={64}
+                />
+              </div>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-4 font-pally">Produit</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#features" className="hover:text-white transition-colors font-pally">Fonctionnalités</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors font-pally">Tarifs</a></li>
-                <li><a href="#about" className="hover:text-white transition-colors font-pally">À propos</a></li>
+                <li><a href="#features" className="hover:text-white transition-colors font-pally cursor-pointer">Fonctionnalités</a></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors font-pally cursor-pointer">Tarifs</a></li>
+                <li><a href="#about" className="hover:text-white transition-colors font-pally cursor-pointer">À propos</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-4 font-pally">Support</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#contact" className="hover:text-white transition-colors font-pally">Contact</a></li>
-                <li><a href="#faq" className="hover:text-white transition-colors font-pally">FAQ</a></li>
+                <li><a href="#contact" className="hover:text-white transition-colors font-pally cursor-pointer">Contact</a></li>
+                <li><a href="#faq" className="hover:text-white transition-colors font-pally cursor-pointer">FAQ</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-4 font-pally">Légal</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="/privacy" className="hover:text-white transition-colors font-pally">Confidentialité</a></li>
-                <li><a href="/terms" className="hover:text-white transition-colors font-pally">Conditions d&apos;utilisation</a></li>
-                <li><a href="/legal" className="hover:text-white transition-colors font-pally">Mentions légales</a></li>
+                <li><a href="/privacy" className="hover:text-white transition-colors font-pally cursor-pointer">Confidentialité</a></li>
+                <li><a href="/terms" className="hover:text-white transition-colors font-pally cursor-pointer">Conditions d'utilisation</a></li>
+                <li><a href="/legal" className="hover:text-white transition-colors font-pally cursor-pointer">Mentions légales</a></li>
               </ul>
             </div>
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p className="font-pally">&copy; 2024 Fridget. Tous droits réservés.</p>
+            <p className="font-pally">&copy; 2025 Fridget. Tous droits réservés.</p>
           </div>
         </div>
       </footer>
@@ -536,6 +603,56 @@ export default function Home() {
         dataWebsiteId="4a952b4c-1085-45c4-b9bb-571568ea623e" 
         src="https://cloud.umami.is/script.js" 
       />
+
+      {/* Styles CSS pour les animations FAQ */}
+      <style jsx>{`
+        details[open] > div {
+          animation: slideDown 0.3s ease-out;
+        }
+        
+        details:not([open]) > div {
+          animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideUp {
+          from {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          to {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+        }
+      `}</style>
+
+      {/* Bouton fixe pour rouvrir la modale des cookies */}
+      <button
+        onClick={() => {
+          // Supprimer le consentement existant pour forcer la réouverture
+          localStorage.removeItem('fridget-cookie-consent');
+          // Déclencher un événement personnalisé pour rouvrir la modale
+          window.dispatchEvent(new CustomEvent('reopen-cookie-consent'));
+        }}
+        className="fixed bottom-6 left-6 w-12 h-12 bg-fridget-orange hover:bg-orange-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 z-40 flex items-center justify-center group text-2xl cursor-pointer"
+        title="Gérer les cookies"
+      >
+        🍪
+        <span className="absolute -top-2 -right-2 bg-white text-black text-sm rounded-full flex px-1 items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          Cookies
+        </span>
+      </button>
     </div>
   );
 }

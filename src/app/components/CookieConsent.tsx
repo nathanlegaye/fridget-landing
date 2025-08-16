@@ -24,21 +24,28 @@ export default function CookieConsent() {
   useEffect(() => {
     if (!isClient) return;
 
+    // Écouter l'événement pour rouvrir la modale
+    const handleReopenConsent = () => {
+      setShowConsent(true);
+    };
+
+    window.addEventListener('reopen-cookie-consent', handleReopenConsent);
+
     // Vérifier si le consentement a déjà été donné
     const consent = localStorage.getItem('fridget-cookie-consent');
     
-    // Vérifier aussi si c'est la première visite (sessionStorage)
-    const isFirstVisit = !sessionStorage.getItem('fridget-visited');
-    
-    if (!consent || isFirstVisit) {
+    if (!consent) {
+      // Pas de consentement, afficher la modale
       setShowConsent(true);
-      // Marquer comme visité
-      sessionStorage.setItem('fridget-visited', 'true');
     } else {
       try {
         const { analytics, marketing } = JSON.parse(consent);
+        // Restaurer les préférences sauvegardées
         setAnalyticsConsent(analytics);
         setMarketingConsent(marketing);
+        // Ne pas afficher la modale si le consentement existe
+        setShowConsent(false);
+        // Initialiser Umami si le consentement analytics est donné
         if (analytics) {
           initializeUmami();
         }
@@ -47,13 +54,18 @@ export default function CookieConsent() {
         setShowConsent(true);
       }
     }
+
+    // Nettoyer l'écouteur d'événement
+    return () => {
+      window.removeEventListener('reopen-cookie-consent', handleReopenConsent);
+    };
   }, [initializeUmami, isClient]);
 
   const acceptAll = () => {
-    const consent = { analytics: true, marketing: false, necessary: true };
+    const consent = { analytics: true, marketing: true, necessary: true };
     localStorage.setItem('fridget-cookie-consent', JSON.stringify(consent));
     setAnalyticsConsent(true);
-    setMarketingConsent(false);
+    setMarketingConsent(true);
     setShowConsent(false);
     initializeUmami();
   };
@@ -62,6 +74,7 @@ export default function CookieConsent() {
     const consent = { analytics: analyticsConsent, marketing: marketingConsent, necessary: true };
     localStorage.setItem('fridget-cookie-consent', JSON.stringify(consent));
     setShowConsent(false);
+    // Initialiser Umami immédiatement si le consentement analytics est donné
     if (analyticsConsent) {
       initializeUmami();
     }
@@ -115,13 +128,12 @@ export default function CookieConsent() {
                   checked={analyticsConsent}
                   onChange={(e) => {
                     setAnalyticsConsent(e.target.checked);
-                    updateConsent();
                   }}
                   className="w-4 h-4 text-fridget-orange bg-gray-700 border-gray-600 rounded focus:ring-fridget-orange focus:ring-2"
                 />
                 <div>
                   <span className="text-sm font-medium">Analytics (Umami)</span>
-                  <p className="text-xs text-gray-400">Nous aide à comprendre l&apos;utilisation du site</p>
+                  <p className="text-xs text-gray-400">Nous aide à comprendre l'utilisation du site</p>
                 </div>
               </label>
               
@@ -131,7 +143,6 @@ export default function CookieConsent() {
                   checked={marketingConsent}
                   onChange={(e) => {
                     setMarketingConsent(e.target.checked);
-                    updateConsent();
                   }}
                   className="w-4 h-4 text-fridget-orange bg-gray-700 border-gray-600 rounded focus:ring-fridget-orange focus:ring-2"
                 />
@@ -186,15 +197,6 @@ export default function CookieConsent() {
               En savoir plus sur notre politique de confidentialité
             </a>
           </p>
-          
-          {/* Bouton de réinitialisation pour les tests (à retirer en production) */}
-          <button 
-            onClick={resetConsent}
-            className="mt-2 text-xs text-gray-600 hover:text-gray-400 transition-colors"
-            title="Réinitialiser le consentement (tests uniquement)"
-          >
-            🔄 Réinitialiser consentement
-          </button>
         </div>
       </div>
     </div>
