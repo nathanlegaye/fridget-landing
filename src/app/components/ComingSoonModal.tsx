@@ -125,7 +125,7 @@ export default function ComingSoonModal({ isOpen, onClose }: ComingSoonModalProp
           <div className="bg-gray-700 rounded-lg p-4">
             <p className="text-sm text-gray-300 font-pally">
               <span className="text-fridget-orange font-semibold">Bonus exclusifs</span> : 
-              Des avantages et promotions seront attribués aux utilisateurs de la liste de notification !
+              Des avantages et promotions seront attribués aux utilisateurs inscrits à la liste de notification !
             </p>
           </div>
 
