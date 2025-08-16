@@ -198,9 +198,16 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('💥 [NOTIFY API] Erreur notification:', error);
-    console.error('  - Type:', error.constructor.name);
-    console.error('  - Message:', error.message);
-    console.error('  - Stack:', error.stack);
+    
+    // Type guard pour gérer le type 'unknown' de l'erreur
+    if (error instanceof Error) {
+      console.error('  - Type:', error.constructor.name);
+      console.error('  - Message:', error.message);
+      console.error('  - Stack:', error.stack);
+    } else {
+      console.error('  - Type: Unknown error type');
+      console.error('  - Error object:', error);
+    }
     
     return NextResponse.json(
       { error: 'Erreur lors de l\'inscription à la liste de notification' },
