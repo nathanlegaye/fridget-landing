@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
+  console.log('🔥 [NOTIFY API] ===== ROUTE APPELÉE =====');
+  console.log('🔥 [NOTIFY API] Méthode:', request.method);
+  console.log('🔥 [NOTIFY API] URL:', request.url);
+  console.log('🔥 [NOTIFY API] Headers:', Object.fromEntries(request.headers.entries()));
   console.log('🚀 [NOTIFY API] Début de la requête POST');
   
   try {

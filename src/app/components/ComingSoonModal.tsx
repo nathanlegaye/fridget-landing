@@ -16,10 +16,15 @@ export default function ComingSoonModal({ isOpen, onClose }: ComingSoonModalProp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('🚀 [CLIENT] Début de la soumission du formulaire');
+    console.log('📧 [CLIENT] Email à envoyer:', email);
+    
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
     try {
+      console.log('🌐 [CLIENT] Appel de l\'API /api/notify...');
+      
       const response = await fetch('/api/notify', {
         method: 'POST',
         headers: {
@@ -28,20 +33,32 @@ export default function ComingSoonModal({ isOpen, onClose }: ComingSoonModalProp
         body: JSON.stringify({ email }),
       });
 
+      console.log('📡 [CLIENT] Réponse reçue:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        url: response.url
+      });
+
       const data = await response.json();
+      console.log('📊 [CLIENT] Données reçues:', data);
 
       if (response.ok) {
+        console.log('✅ [CLIENT] Succès de l\'inscription');
         setSubmitStatus('success');
         setSubmitMessage(data.message);
         setEmail(''); // Reset le champ email
       } else {
+        console.log('❌ [CLIENT] Erreur de l\'API:', data.error);
         setSubmitStatus('error');
         setSubmitMessage(data.error || 'Erreur lors de l\'inscription.');
       }
-    } catch {
+    } catch (error) {
+      console.error('💥 [CLIENT] Erreur de connexion:', error);
       setSubmitStatus('error');
       setSubmitMessage('Erreur de connexion. Veuillez réessayer.');
     } finally {
+      console.log('🏁 [CLIENT] Fin de la soumission');
       setIsSubmitting(false);
     }
   };
