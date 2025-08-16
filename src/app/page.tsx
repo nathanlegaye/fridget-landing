@@ -645,7 +645,17 @@ export default function Home() {
           // Déclencher un événement personnalisé pour rouvrir la modale
           window.dispatchEvent(new CustomEvent('reopen-cookie-consent'));
         }}
-        className="fixed bottom-6 left-6 w-12 h-12 bg-fridget-orange hover:bg-orange-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 z-40 flex items-center justify-center group text-2xl cursor-pointer"
+        className="fixed bottom-6 left-6 w-12 h-12 bg-fridget-orange hover:bg-orange-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 z-50 flex items-center justify-center group text-2xl cursor-pointer transform-gpu"
+        style={{
+          position: 'fixed',
+          bottom: '24px',
+          left: '24px',
+          zIndex: 9999,
+          WebkitTransform: 'translateZ(0)',
+          transform: 'translateZ(0)',
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden'
+        }}
         title="Gérer les cookies"
       >
         🍪
